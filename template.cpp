@@ -284,7 +284,7 @@ class Sat{
 };
 
 
-int manachers(string s)
+vector<int> manachers(string s)
 {
     int n = s.length();
     string st = "$";
@@ -294,12 +294,12 @@ int manachers(string s)
         st.push_back('$');
     }
 
-    vector<int> lps(st.size(),0);
+    vector<int> lps(st.length(),0);
     int start = 0;
     int end = 0;
-    for(int i = 0;i<2*n+1;)
+    for(int i = 0;i<st.length();)
     {
-        while(start > 0 && end < st.size()-1 && st[start-1] == st[end+1])
+        while(start > 0 && end < st.length()-1 && st[start-1] == st[end+1])
         {
             start--;
             end++;
@@ -307,12 +307,12 @@ int manachers(string s)
 
         lps[i] = end-start+1;
         
-        int nc = end + (i%2 == 0 ? 1 : 0);
+        int nc = end + 1;
 
         for(int j = i+1;j<=end;j++)
         {
             lps[j] = min(lps[2*i-j], 2*(end-j)+1);
-            if(j + lps[2*i-j]/2 == end && end != st.length()-1)
+            if(j + lps[j]/2 == end && end != st.length()-1)
             {
                 nc = j;
                 break;
@@ -324,10 +324,7 @@ int manachers(string s)
         end = i + lps[i]/2;
         start = i - lps[i]/2;
     }
-    int ans = 1;
-    for(int v : lps)
-        ans = max(ans,v/2);
-    return ans;
+    return lps;
 }
 
 class Lca{
